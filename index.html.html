@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Recibo de Abono</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4edda;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            color: #218838;
+        }
+        label, input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .recibo {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f8f9fa;
+            display: none;
+        }
+        .firma {
+            margin-top: 30px;
+            height: 50px;
+            border-bottom: 2px solid black;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>👁️Kasmonys</h2>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" placeholder="Ingrese su nombre">
+        <label for="deuda">Usted debía:</label>
+        <input type="number" id="deuda" placeholder="Ingrese la deuda total">
+        <label for="abono">Abono realizado:</label>
+        <input type="number" id="abono" placeholder="Ingrese el abono realizado">
+        <label for="concepto">Concepto:</label>
+        <input type="text" id="concepto" placeholder="Ingrese el concepto del pago">
+        <button onclick="generarRecibo()">Generar Recibo</button>
+        <div class="recibo" id="recibo"></div>
+    </div>
+    <script>
+        function formatCurrency(value) {
+            return value.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        }
+
+        function formatDate(date) {
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('es-MX', options);
+        }
+
+        function generarRecibo() {
+            let nombre = document.getElementById('nombre').value;
+            let deuda = parseFloat(document.getElementById('deuda').value);
+            let abono = parseFloat(document.getElementById('abono').value);
+            let concepto = document.getElementById('concepto').value;
+            let numeroAbono = Math.floor(100000 + Math.random() * 900000);
+            
+            if (!nombre || isNaN(deuda) || deuda <= 0 || isNaN(abono) || abono <= 0 || !concepto) {
+                alert("Ingrese valores válidos.");
+                return;
+            }
+            
+            let nuevaDeuda = deuda - abono;
+            
+            document.getElementById('recibo').innerHTML = `
+                <h2>👁️Kasmonys</h2>
+                <h3>Recibo de Abono #${numeroAbono}</h3>
+                <p><strong>Fecha:</strong> ${formatDate(new Date())}</p>
+                <p>Yo, <b>${nombre}</b>, he realizado un abono de <b>${formatCurrency(abono)}</b> por concepto de <b>${concepto}</b>.</p>
+                <p><strong>Usted debía:</strong> ${formatCurrency(deuda)}</p>
+                <p><strong>Abono realizado:</strong> ${formatCurrency(abono)}</p>
+                <p><strong>Ahora debe:</strong> ${formatCurrency(nuevaDeuda)}</p>
+                <div class="firma">Firma</div>
+                <p>¡Kasmonys Financiamos tus sueños!</p>
+            `;
+            document.getElementById('recibo').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
